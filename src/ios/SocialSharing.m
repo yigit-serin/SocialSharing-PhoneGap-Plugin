@@ -685,7 +685,11 @@ static NSString *const kShareOptionIPadCoordinates = @"iPadCoordinates";
     NSString *encodedShareStringForWhatsApp = [NSString stringWithFormat:@"whatsapp://send?%@%@text=%@", abidString, phoneString, encodedShareString];
 
     NSURL *whatsappURL = [NSURL URLWithString:encodedShareStringForWhatsApp];
-    [[UIApplication sharedApplication] openURL: whatsappURL];
+    if (@available(iOS 10.0, *)) {
+        [[UIApplication sharedApplication] openURL:whatsappURL options:@{} completionHandler:nil];
+    } else {
+        [[UIApplication sharedApplication] openURL:whatsappURL];
+    }
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
   }
